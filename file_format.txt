@@ -1,0 +1,11 @@
+A .xvl file executable should contain a 50 byte file header of the following format
+
+Byte Offset - Value
+
+0x0 - Magic bytes (0x65, 0x58, 0x56, 0x4c)
+0x4 - Executable version
+0x5 - File size in bytes excluding header (Little endian)
+0xd - Starting instruction offset (Little endian)
+0x15 - Flags (From LSB to MSB 0 = Hash algorithm (1 = SHA3-224, 0 = SHA2-224))
+0x16 - Checksum (SHA3 or SHA2 hash of the expected file. (28 bytes))
+0x32 - End header byte (0xaa)

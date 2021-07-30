@@ -1,0 +1,35 @@
+[package]
+name = "vxlvm"
+version = "0.1.0"
+authors = ["aidos9 <20310468+aidos9@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+name = "vxlvm"
+path = "src/vxlvm-lib/lib.rs"
+
+[[bin]]
+name = "vxlvm"
+path = "src/vxlvm-bin/main.rs"
+required-features = ["with-binary"]
+
+[features]
+default = ["with-binary"]
+with-binary = ["clap"]
+
+[dependencies]
+either = { version = "1.6", features = [] }
+paste = "1.0"
+sha2 = { version = "0.9", features = [] }
+sha3 = { version = "0.9", features = [] }
+digest = { version = "0.9", features = [] }
+clap = { version = "2.33", optional = true }
+voxl-instruction-set = { git = "https://github.com/Voxeon/voxl-instruction-set", branch = "main" }
+
+[dev-dependencies]
+criterion = "0.3"
+hex = "0.4"
+
+[[bench]]
+name = "bench_individual_instructions"
+harness = false
