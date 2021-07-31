@@ -1,6 +1,6 @@
 use crate::handler::OSHandler;
 
-use voxl_instruction_set::instruction::Instruction;
+use vxl_iset::instruction::Instruction;
 use vxlvm::error::VXLVMError;
 use vxlvm::loader::Loader;
 use vxlvm::validator::BulkValidator;

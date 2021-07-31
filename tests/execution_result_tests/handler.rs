@@ -1,8 +1,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use voxl_instruction_set::instruction_arguments::Register;
-use voxl_instruction_set::syscall_handler::SyscallHandler;
+use vxl_iset::instruction_arguments::Register;
+use vxl_iset::syscall_handler::SyscallHandler;
 use vxlvm::vm::VM;
 
 pub struct System {

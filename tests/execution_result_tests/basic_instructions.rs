@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use voxl_instruction_set::instruction_arguments::Register;
+use vxl_iset::instruction_arguments::Register;
 use vxlvm::error::VMError;
 use vxlvm::validator::{BulkValidator, Validator};
 use vxlvm::vm::VM;

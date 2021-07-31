@@ -1,5 +1,5 @@
 use super::handler::System;
-use voxl_instruction_set::instruction_arguments::Register;
+use vxl_iset::instruction_arguments::Register;
 use vxlvm::loader::Loader;
 use vxlvm::validator::BulkValidator;
 use vxlvm::vm::VM;

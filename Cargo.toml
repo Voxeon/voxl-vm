@@ -24,7 +24,7 @@ sha2 = { version = "0.9", features = [] }
 sha3 = { version = "0.9", features = [] }
 digest = { version = "0.9", features = [] }
 clap = { version = "2.33", optional = true }
-voxl-instruction-set = { git = "https://github.com/Voxeon/voxl-instruction-set", branch = "main" }
+vxl-iset = { git = "https://github.com/Voxeon/vxl-iset", branch = "main" }
 
 [dev-dependencies]
 criterion = "0.3"

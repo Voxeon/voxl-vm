@@ -1,14 +1,14 @@
 use super::{Memory, Registers, Stack};
 use crate::error::VMError;
 
-use voxl_instruction_set::execute_instruction::ExecuteInstruction;
-use voxl_instruction_set::instruction::Instruction;
-use voxl_instruction_set::instruction_arguments::{Address, Immediate, Register};
+use vxl_iset::execute_instruction::ExecuteInstruction;
+use vxl_iset::instruction::Instruction;
+use vxl_iset::instruction_arguments::{Address, Immediate, Register};
+use vxl_iset::syscall_handler::SyscallHandler;
 
 use alloc::vec::Vec;
 use core::convert::TryInto;
 use paste::paste;
-use voxl_instruction_set::syscall_handler::SyscallHandler;
 
 macro_rules! compute_operation {
     ($t:ty, $op:ident) => {
@@ -581,10 +581,9 @@ impl ExecuteInstruction for VM {
         if arr.len() < 8 {
             self.register_bank.set_value(
                 r as u8,
-                *arr.last().ok_or(VMError::IndexBeyondBoundsError(
-                    1,
-                    arr.len() as u64,
-                ))? as u64,
+                *arr.last()
+                    .ok_or(VMError::IndexBeyondBoundsError(1, arr.len() as u64))?
+                    as u64,
             );
         } else {
             let mut last_word = [0u8; 8];

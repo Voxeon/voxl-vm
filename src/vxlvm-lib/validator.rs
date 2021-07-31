@@ -1,10 +1,8 @@
 use core::usize;
 
 use alloc::vec::Vec;
-use voxl_instruction_set::instruction::Instruction;
-use voxl_instruction_set::instruction_arguments::{
-    Address, Immediate, InstructionArgument, Register,
-};
+use vxl_iset::instruction::Instruction;
+use vxl_iset::instruction_arguments::{Address, Immediate, InstructionArgument, Register};
 
 use crate::error::ValidatorError;
 

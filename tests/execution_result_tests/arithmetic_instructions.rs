@@ -1,6 +1,6 @@
 use super::handler::System;
 use paste::paste;
-use voxl_instruction_set::instruction_arguments::Register;
+use vxl_iset::instruction_arguments::Register;
 use vxlvm::validator::{BulkValidator, Validator};
 use vxlvm::vm::VM;
 

@@ -3,8 +3,8 @@ use digest::Digest;
 
 use crate::error::{LoaderError, ValidatorError};
 use crate::validator::Validator;
-use voxl_instruction_set::instruction::Instruction;
-use voxl_instruction_set::vxl_file::VXLHeader;
+use vxl_iset::instruction::Instruction;
+use vxl_iset::vxl_file::VXLHeader;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Loader {

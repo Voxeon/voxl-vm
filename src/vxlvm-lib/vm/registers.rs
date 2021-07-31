@@ -70,7 +70,7 @@ impl Default for Registers {
 
 #[cfg(test)]
 mod tests {
-    use voxl_instruction_set::instruction_arguments::Register;
+    use vxl_iset::instruction_arguments::Register;
 
     use super::*;
 

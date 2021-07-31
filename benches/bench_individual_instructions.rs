@@ -1,7 +1,7 @@
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
-use vxlvm::error::VMError;
+use vxl_iset::syscall_handler::SyscallHandler;
 use vxlvm::validator::{BulkValidator, Validator};
-use vxlvm::vm::{Memory, Registers, SyscallHandler, VM};
+use vxlvm::vm::VM;
 
 struct System;
 
@@ -11,14 +11,69 @@ impl System {
     }
 }
 
-impl SyscallHandler for System {
-    fn execute_call(
-        &mut self,
-        _call: u64,
-        _memory: &Memory,
-        _register: &Registers,
-    ) -> Result<u64, VMError> {
-        return Ok(0);
+impl SyscallHandler<VM> for System {
+    fn execute_target_specific_call(&mut self, _call: u64, _machine: &mut VM) -> Option<u64> {
+        return None;
+    }
+
+    fn exit(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn write_byte_terminal(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn write_terminal(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn read_byte_terminal(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn read_terminal(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn open_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn close_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn read_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn write_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn execute_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn execute_vxl_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn delete_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn move_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn copy_file(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
+    }
+
+    fn time_of_day(&mut self, _machine: &mut VM) -> Option<u64> {
+        panic!("Failed. Unexpectedly reached an unimplemented handler function.");
     }
 }
 
@@ -40,15 +95,17 @@ fn benchmark_load_byte(c: &mut Criterion) {
     c.bench_function("load-byte", |b| {
         b.iter_batched(
             || {
-                VM::new(
-                    Box::new(System::new()),
-                    BulkValidator::with_bytes(bytes.to_vec())
-                        .process_all_instructions()
-                        .unwrap(),
+                (
+                    VM::new(
+                        BulkValidator::with_bytes(bytes.to_vec())
+                            .process_all_instructions()
+                            .unwrap(),
+                    ),
+                    System::new(),
                 )
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )
@@ -73,15 +130,17 @@ fn benchmark_load_integer(c: &mut Criterion) {
     c.bench_function("load-integer", |b| {
         b.iter_batched(
             || {
-                VM::new(
-                    Box::new(System::new()),
-                    BulkValidator::with_bytes(bytes.to_vec())
-                        .process_all_instructions()
-                        .unwrap(),
+                (
+                    VM::new(
+                        BulkValidator::with_bytes(bytes.to_vec())
+                            .process_all_instructions()
+                            .unwrap(),
+                    ),
+                    System::new(),
                 )
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )
@@ -109,20 +168,16 @@ fn benchmark_malloc(c: &mut Criterion) {
     c.bench_function("malloc", |b| {
         b.iter_batched(
             || {
-                let handler = System::new();
                 let validator = BulkValidator::with_bytes(bytes.clone());
-                let mut vm = VM::new(
-                    Box::new(handler),
-                    validator.process_all_instructions().unwrap(),
-                );
+                let mut vm = VM::new(validator.process_all_instructions().unwrap());
 
                 // ldi
-                vm.run_next().unwrap();
+                vm.run_next(&mut System::new()).unwrap();
 
-                vm
+                (vm, System::new())
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )
@@ -147,17 +202,13 @@ fn benchmark_malloci(c: &mut Criterion) {
     c.bench_function("malloci", |b| {
         b.iter_batched(
             || {
-                let handler = System::new();
                 let validator = BulkValidator::with_bytes(bytes.clone());
-                let vm = VM::new(
-                    Box::new(handler),
-                    validator.process_all_instructions().unwrap(),
-                );
+                let vm = VM::new(validator.process_all_instructions().unwrap());
 
-                vm
+                (vm, System::new())
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )
@@ -188,23 +239,19 @@ fn benchmark_free(c: &mut Criterion) {
     c.bench_function("free", |b| {
         b.iter_batched(
             || {
-                let handler = System::new();
                 let validator = BulkValidator::with_bytes(bytes.clone());
-                let mut vm = VM::new(
-                    Box::new(handler),
-                    validator.process_all_instructions().unwrap(),
-                );
+                let mut vm = VM::new(validator.process_all_instructions().unwrap());
 
                 // ldi
-                vm.run_next().unwrap();
+                vm.run_next(&mut System::new()).unwrap();
 
                 // malloc
-                vm.run_next().unwrap();
+                vm.run_next(&mut System::new()).unwrap();
 
-                vm
+                (vm, System::new())
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )
@@ -243,23 +290,19 @@ fn benchmark_freea(c: &mut Criterion) {
     c.bench_function("freea", |b| {
         b.iter_batched(
             || {
-                let handler = System::new();
                 let validator = BulkValidator::with_bytes(bytes.clone());
-                let mut vm = VM::new(
-                    Box::new(handler),
-                    validator.process_all_instructions().unwrap(),
-                );
+                let mut vm = VM::new(validator.process_all_instructions().unwrap());
 
                 // ldi
-                vm.run_next().unwrap();
+                vm.run_next(&mut System::new()).unwrap();
 
                 // malloc
-                vm.run_next().unwrap();
+                vm.run_next(&mut System::new()).unwrap();
 
-                vm
+                (vm, System::new())
             },
-            |mut vm| {
-                vm.run_next().unwrap();
+            |(mut vm, mut handler)| {
+                vm.run_next(&mut handler).unwrap();
             },
             BatchSize::SmallInput,
         )

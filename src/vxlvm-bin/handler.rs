@@ -1,10 +1,10 @@
-use voxl_instruction_set::instruction_arguments::Register;
-use voxl_instruction_set::syscall_handler::SyscallHandler;
+use vxl_iset::instruction_arguments::Register;
+use vxl_iset::syscall_handler::SyscallHandler;
 use vxlvm::vm::VM;
 
-use std::io::{self, stdout, Read, Write};
-use std::collections::{BTreeMap};
+use std::collections::BTreeMap;
 use std::fs::File;
+use std::io::{self, stdout, Read, Write};
 use std::time;
 
 pub struct OSHandler {
@@ -183,6 +183,9 @@ impl SyscallHandler<VM> for OSHandler {
     }
 
     fn time_of_day(&mut self, _machine: &mut VM) -> Option<u64> {
-        return time::SystemTime::now().duration_since(time::UNIX_EPOCH).ok().map(|d| d.as_secs());
+        return time::SystemTime::now()
+            .duration_since(time::UNIX_EPOCH)
+            .ok()
+            .map(|d| d.as_secs());
     }
 }
