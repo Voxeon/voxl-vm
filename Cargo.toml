@@ -1,8 +1,8 @@
 [package]
 name = "vxlvm"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["aidos9 <20310468+aidos9@users.noreply.github.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "vxlvm"
@@ -20,11 +20,11 @@ with-binary = ["clap"]
 [dependencies]
 either = { version = "1.6", features = [] }
 paste = "1.0"
-sha2 = { version = "0.9", features = [] }
-sha3 = { version = "0.9", features = [] }
-digest = { version = "0.9", features = [] }
-clap = { version = "2.33", optional = true }
+sha2 = { version = "0.10", features = [] }
+sha3 = { version = "0.10", features = [] }
+digest = { version = "0.10", features = [] }
 vxl-iset = { git = "https://github.com/Voxeon/vxl-iset", branch = "main" }
+clap = { version = "3.0", features = ["derive", "wrap_help", "color"], optional = true }
 
 [dev-dependencies]
 criterion = "0.3"

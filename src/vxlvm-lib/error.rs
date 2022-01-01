@@ -1,5 +1,5 @@
-use alloc::string::{String, ToString};
 use alloc::format;
+use alloc::string::{String, ToString};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
 pub enum LoaderError {
@@ -93,13 +93,20 @@ impl VMError {
 impl VXLVMError for LoaderError {
     fn specific_description(&self) -> String {
         return match self {
-            LoaderError::NotEnoughBytesForHeader => "The supplied input does not contain enough bytes for the header.",
-            LoaderError::UnsupportedVersion => "This file contains code for an unsupported voxeol version.",
+            LoaderError::NotEnoughBytesForHeader => {
+                "The supplied input does not contain enough bytes for the header."
+            }
+            LoaderError::UnsupportedVersion => {
+                "This file contains code for an unsupported voxeol version."
+            }
             LoaderError::InvalidChecksum => "This file's checksum is invalid.",
-            LoaderError::NonMatchingFileSize => "The expected file size does not match the actual size.",
+            LoaderError::NonMatchingFileSize => {
+                "The expected file size does not match the actual size."
+            }
             LoaderError::InvalidMagic => "This file is not of the executable-voxeol format.",
             LoaderError::InvalidEndHeaderMarker => "Could not find the end-header marker.",
-        }.to_string();
+        }
+        .to_string();
     }
 
     fn short_description(&self) -> String {
@@ -115,7 +122,8 @@ impl VXLVMError for ValidatorError {
             ValidatorError::UnknownImmediateCountForOpcode => "Unknown immediate count for opcode.",
             ValidatorError::UnknownAddressCountForOpcode => "Unknown address count for opcode.",
             ValidatorError::InvalidInstructionFormat => "Invalid instruction format",
-        }.to_string();
+        }
+        .to_string();
     }
 
     fn short_description(&self) -> String {
@@ -131,13 +139,21 @@ impl VXLVMError for VMError {
             VMError::AccessBeyondStackBounds => "Attempt to access beyond stack bounds".to_string(),
             VMError::FailedMalloc => "Failed to allocate memory".to_string(),
             VMError::FailedFreeNoAddressError(a) => format!("Failed to free. No address {}.", a),
-            VMError::FailedSetNoAddressError(a) => format!("Failed to set memory. No address {}.", a),
-            VMError::FailedGetNoAddressError(a) => format!("Failed to get from memory. No address {}.", a),
-            VMError::IndexBeyondBoundsError(i, b) => format!("Index: {}, is beyond the bounds of {}.", i, b),
+            VMError::FailedSetNoAddressError(a) => {
+                format!("Failed to set memory. No address {}.", a)
+            }
+            VMError::FailedGetNoAddressError(a) => {
+                format!("Failed to get from memory. No address {}.", a)
+            }
+            VMError::IndexBeyondBoundsError(i, b) => {
+                format!("Index: {}, is beyond the bounds of {}.", i, b)
+            }
             VMError::IntegerOverflowError => "Integer overflow.".to_string(),
             VMError::UnsignedIntegerOverflowError => "Unsigned integer overflow".to_string(),
             VMError::FloatOverflowError => "Float overflow.".to_string(),
-            VMError::AttemptedModuloZeroOperation => "Attempted a divide by 0 operation".to_string(),
+            VMError::AttemptedModuloZeroOperation => {
+                "Attempted a divide by 0 operation".to_string()
+            }
             VMError::UnknownSystemCall(c) => format!("Unknown system call {}", c),
             VMError::Unknown(s) => s.clone(),
         };
