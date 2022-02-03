@@ -166,7 +166,7 @@ impl SyscallHandler<VM> for OSHandler {
         todo!()
     }
 
-    fn execute_vxl_file(&mut self, machine: &mut VM) -> Option<u64> {
+    fn execute_xvl_file(&mut self, machine: &mut VM) -> Option<u64> {
         todo!()
     }
 
